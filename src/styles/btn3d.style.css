@@ -1,0 +1,64 @@
+:root {
+  --body-bg: hsl(33, 100%, 88%);
+  --btn-width: 8rem;
+  --btn-height: 2.5rem;
+  --btn-bg: hsl(0, 94%, 72%);
+  --btn-battom-bg: hsl(0, 62%, 67%);
+  --btn-shadow-bg: hsla(0, 62%, 67%, 0.15);
+  --text-cl: #efefef;
+  --border-radius: 10px 10px 15px 15px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.container-btn3d {
+  position: relative;
+}
+
+.container-btn3d > .button {
+  width: 100%;
+  color: var(--text-cl);
+  background-color: var(--btn-bg);
+
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  transform: translateY(0);
+  -moz-transition: transform 50ms ease-in-out;
+  -webkit-transition: transform 50ms ease-in-out;
+  transition: transform 50ms ease-in-out;
+  z-index: 0;
+}
+
+.container-btn3d .button__bottom {
+  width: 100%;
+  height: var(--btn-height);
+  background-color: var(--btn-battom-bg);
+  border-radius: var(--border-radius);
+  position: absolute;
+  bottom: -6px;
+  z-index: -1;
+}
+
+.container-btn3d > .button__shadow {
+  width: calc(100% + 0.5rem);
+  height: var(--btn-height);
+  outline: 2px solid hsla(0, 62%, 67%, 0.15);
+  background-color: var(--btn-shadow-bg);
+  border-radius: var(--border-radius);
+  position: absolute;
+  top: 15px;
+  left: -4px;
+  z-index: -2;
+}
+
+.container-btn3d > .button:active,
+.container-btn3d > .button:focus-visible {
+  transform: translateY(6px);
+}

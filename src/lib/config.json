@@ -1,0 +1,65 @@
+{
+  "game": {
+    "coin-per-object": 1,
+    "item-per-object": 1,
+    "coin-mul": 1.5,
+    "rank-base-reward": 10,
+    "coin-base-reward": 40,
+    "base-max-difficulty": 10,
+    "max-item-per-order": 2,
+    "border-values-rank-for-difficulty": [
+      {
+        "rank": 0,
+        "max-difficulty": 10,
+        "object": {
+          "tier": 1,
+          "id": {
+            "min": 1,
+            "max": 6
+          },
+          "coins": 1,
+          "items": 1
+        }
+      },
+      {
+        "rank": 1500,
+        "max-difficulty": 50,
+        "object": {
+          "tier": 2,
+          "id": {
+            "min": 7,
+            "max": 12
+          },
+          "coins": 3,
+          "items": 3
+        }
+      },
+      {
+        "rank": 4500,
+        "max-difficulty": 90,
+        "object": {
+          "tier": 3,
+          "id": {
+            "min": 13,
+            "max": 18
+          },
+          "coins": 6,
+          "items": 6
+        }
+      },
+      {
+        "rank": 10000,
+        "max-difficulty": 150,
+        "object": {
+          "tier": 4,
+          "id": {
+            "min": 19,
+            "max": 24
+          },
+          "coins": 9,
+          "items": 9
+        }
+      }
+    ]
+  }
+}

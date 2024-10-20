@@ -1,0 +1,75 @@
+.text3d {
+  text-shadow:
+    -1px -1px 0 #352e23,
+    1px -1px 0 #352e23,
+    -1px 1px 0 #352e23,
+    1px 1px 0 #352e23,
+    2px 2px 0 #352e23,
+    3px 3px 0 #352e23,
+    4px 4px 0 #352e23;
+}
+
+.text3d-sm {
+  text-shadow:
+    -1px -1px 0 #352e23,
+    1px -1px 0 #352e23,
+    -1px 1px 0 #352e23,
+    1px 1px 0 #352e23,
+    2px 2px 0 #352e23;
+}
+
+.text-border {
+  text-shadow:
+    -1px -1px 0 #352e23,
+    1px -1px 0 #352e23,
+    -1px 1px 0 #352e23,
+    1px 1px 0 #352e23;
+}
+
+.text-border-gray {
+  text-shadow:
+    -1px -1px 0 #5f7480,
+    1px -1px 0 #5f7480,
+    -1px 1px 0 #5f7480,
+    1px 1px 0 #5f7480;
+}
+
+.text-border-blue {
+  text-shadow:
+    -1px -1px 0 #2673af,
+    1px -1px 0 #2673af,
+    -1px 1px 0 #2673af,
+    1px 1px 0 #2673af;
+}
+
+.text-border-green {
+  text-shadow:
+    -1px -1px 0 #656f34,
+    1px -1px 0 #656f34,
+    -1px 1px 0 #656f34,
+    1px 1px 0 #656f34;
+}
+
+.text-border-orange {
+  text-shadow:
+    -1px -1px 0 #b17100,
+    1px -1px 0 #b17100,
+    -1px 1px 0 #b17100,
+    1px 1px 0 #b17100;
+}
+
+.text-border-yellow {
+  text-shadow:
+    -1px -1px 0 #b57c1c,
+    1px -1px 0 #b57c1c,
+    -1px 1px 0 #b57c1c,
+    1px 1px 0 #b57c1c;
+}
+
+.text-border-white {
+  text-shadow:
+    -1px -1px 0 #e0d6c7,
+    1px -1px 0 #e0d6c7,
+    -1px 1px 0 #e0d6c7,
+    1px 1px 0 #e0d6c7;
+}

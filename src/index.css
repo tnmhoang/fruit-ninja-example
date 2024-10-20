@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'swiper/css';
+@import 'swiper/css/pagination';
+@import 'swiper/css/navigation';
+@import './styles/btn3d.style.css';
+@import './styles/text3d.style.css';
+@import './styles/progressBar.css';
+@import './styles/dotTyping.style.css';
+@import './styles/animation.style.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Back to School';
+  src: url('/fonts/Back_to_school.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --warning: 38 92% 50%;
+  --warning-foreground: 48 96% 89%;
+}
+
+.dark {
+  --warning: 48 96% 89%;
+  --warning-foreground: 38 92% 50%;
+}
+
+#fruitContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Đảm bảo không có nội dung nào hiển thị ra ngoài */
+  border: 1px solid black;
+}
+
+/* img {
+  position: absolute;
+  width: 50px; Điều chỉnh kích thước trái cây 
+  height: 50px;
+  object-fit: contain;
+} */
+
+#gameOver {
+  text-align: center;
+  font-size: 24px;
+  color: red;
+  display: none;
+}
+
+#startReset {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+}
+
+#score {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.score-animation {
+  position: absolute;
+  font-size: 24px;
+  color: yellow;
+  animation: fadeOut 0.5s ease-in-out;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+/* Lightning-like trail */
+.trail {
+  position: absolute;
+  width: 10px; /* Adjust the size to make it sharp */
+  height: 10px;
+  background-color: cyan; /* Lightning color */
+  border-radius: 50%;
+  pointer-events: none; /* Allow events to pass through */
+  transform: translate(-50%, -50%);
+
+  /* Glowing effect for lightning */
+  /* box-shadow:
+    0 0 10px rgba(0, 255, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4); */
+
+  /* Smoother linear animation for a lightning-like effect */
+  animation: trailEffect 0.3s linear forwards;
+}
+
+@keyframes trailEffect {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2); /* Grow the trail */
+  }
+}
+
+.trailing-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow touch events to pass through to the game */
+}
+.task-list {
+  display: flex;
+  gap: 20px; /* Khoảng cách giữa các nhiệm vụ */
+  position: relative;
+}
+
+.task {
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  transition:
+    transform 0.5s ease-in-out,
+    opacity 0.5s ease-in-out;
+}
+
+/* Trường hợp nhiệm vụ đầu tiên hoàn thành - trượt */
+.task-slide-enter {
+  opacity: 0;
+  transform: translateX(100%); /* Trượt từ phải */
+}
+
+.task-slide-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.task-slide-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.task-slide-exit-active {
+  opacity: 0;
+  transform: translateX(-100%); /* Trượt ra trái */
+}
+
+/* Trường hợp nhiệm vụ thứ hai hoàn thành - mờ dần */
+.task-fade-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.task-fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.task-fade-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.task-fade-exit-active {
+  opacity: 0;
+  transform: translateX(0); /* Mờ dần, giữ nguyên vị trí */
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.toast-custom {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+
+  padding: 16px;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease-in-out,
+    visibility 0.5s ease-in-out;
+  z-index: 99;
+}
+
+.toast-custom.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.toast-custom.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.bordered-text {
+  text-shadow:
+    -1px -1px 0 #292524,
+    /* Left-top shadow */ 1px -1px 0 #292524,
+    /* Right-top shadow */ -1px 1px 0 #292524,
+    /* Left-bottom shadow */ 1px 1px 0 #292524; /* Right-bottom shadow */
+}
