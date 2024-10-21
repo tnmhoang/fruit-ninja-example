@@ -46,22 +46,6 @@ export default function useEffectGame() {
     };
   }, []);
 
-  // effect mouse move
-  const createTrailingEffect = (x: number, y: number) => {
-    const trail = document.createElement('div');
-
-    trail.className = 'trail';
-    trail.style.left = `${x}px`;
-    trail.style.top = `${y}px`;
-    document.body.appendChild(trail);
-
-    // Remove trail after animation ends (e.g., 0.5s)
-
-    setTimeout(() => {
-      trail.remove();
-    }, 500); // Match duration of the CSS animation
-  };
-
   // effect after swipe item right
   const createCompletedEffect = (x: number, y: number) => {
     const trail = document.createElement('span');
@@ -78,5 +62,5 @@ export default function useEffectGame() {
     }, 500); // Match duration of the CSS animation
   };
 
-  return { createCompletedEffect, createTrailingEffect };
+  return { createCompletedEffect };
 }

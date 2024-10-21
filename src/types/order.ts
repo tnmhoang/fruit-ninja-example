@@ -2,7 +2,7 @@ export interface IOrder {
   items: IOrderItem[];
   object_tier: number;
   total: number;
-  image_url?: string;
+  order_dog?: number;
 }
 
 export interface IOrderItem {

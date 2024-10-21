@@ -5,6 +5,7 @@ import useSoundEffectStore from './useSoundEffectStore';
 const useSoundEffect = () => {
   const bgmRef = useRef<HTMLAudioElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const outroRef = useRef<HTMLAudioElement | null>(null);
   const {
     isBgmOn,
     isSfxOn,
@@ -58,6 +59,23 @@ const useSoundEffect = () => {
       });
     }
   }, [isBgmOn, doglDashMusic, doglDashMusic2]);
+
+  const playOutro = useCallback(() => {
+    if (isBgmOn) {
+      outroRef.current = sparksOutro;
+      if (outroRef.current) {
+        outroRef.current.play().catch((err) => {
+          document.addEventListener(
+            'click',
+            () => {
+              outroRef.current?.play().catch((err) => console.log('sparkOutro:', err));
+            },
+            { once: true },
+          );
+        });
+      }
+    }
+  }, [isBgmOn, sparksOutro]);
 
   const stopBgm = useCallback(() => {
     if (bgmRef.current) {
@@ -163,7 +181,7 @@ const useSoundEffect = () => {
     }
   };
 
-  return { playBgm, stopBgm, playSfx, stop, pauseAudio, resumeAudio };
+  return { playBgm, stopBgm, playSfx, stop, pauseAudio, resumeAudio, playOutro };
 };
 
 export default useSoundEffect;

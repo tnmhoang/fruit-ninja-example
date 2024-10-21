@@ -2,7 +2,7 @@ import Button3D from '@/components/common/Button3D';
 import { cn } from '@/lib/utils';
 import { IOrder } from '@/types/order';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { tier1Items, tier2Items, tier3Items } from '../constant';
+import { tier1Items, tier2Items, tier3Items, tier4Items } from '../constant';
 
 const OrderGame = ({
   listOrder,
@@ -15,6 +15,7 @@ const OrderGame = ({
     const item = tier1Items
       .concat(tier2Items)
       .concat(tier3Items)
+      .concat(tier4Items)
       .filter((el) => el.object_id === id)[0];
     return item?.img_url;
   };
@@ -43,13 +44,19 @@ const OrderGame = ({
               >
                 <div className="flex w-full justify-center gap-2 px-2">
                   <div className="h-[56px] w-[56px] overflow-hidden rounded-full bg-[#352E23]">
-                    <img src={order.image_url ?? './imgs/orders/dogs/dog1.png'} />
+                    <img
+                      src={
+                        order.order_dog
+                          ? `./imgs/orders/dogs/dog${order.order_dog}.png`
+                          : './imgs/orders/dogs/dog1.png'
+                      }
+                    />
                   </div>
                   <div className="ml-2 flex flex-1 flex-col justify-center">
                     {order.items.map((item, idx) => {
                       return (
                         <div
-                          className="relative my-1 flex h-[22px] w-fit items-center justify-end bg-[#6a5b4680] p-2"
+                          className="relative my-1 flex h-[22px] w-[90px] items-center justify-center bg-[#6a5b4680] p-2"
                           style={{ borderRadius: 20 }}
                           key={idx}
                         >
@@ -62,7 +69,7 @@ const OrderGame = ({
                             {item.completed * itemPerObject > item.total
                               ? item.total
                               : item.completed * itemPerObject}{' '}
-                            /{item.total}
+                            / {item.total}
                           </div>
                         </div>
                       );

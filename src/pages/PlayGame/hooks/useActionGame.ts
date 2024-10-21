@@ -1,6 +1,6 @@
 import { IOrder } from '@/types/order';
 import { useEffect, useMemo, useRef } from 'react';
-import { tier1Items, tier2Items, tier3Items, tier4Items } from '../constant';
+import { IMAGE_SIZE, tier1Items, tier2Items, tier3Items, tier4Items } from '../constant';
 import { shuffleArray } from '@/lib/utils';
 
 declare const window: any;
@@ -8,62 +8,84 @@ declare const window: any;
 interface ActionGameProps {
   listOrder: IOrder[];
   handleItemHit: (object_id: number, x: number, y: number) => void;
-  createTrailingEffect: (x: number, y: number) => void;
   isSfxOn: boolean;
 }
 
+interface Fruit {
+  object_id: number;
+  x: number;
+  y: number;
+  speed: number;
+}
+
+interface IPosition {
+  x: number;
+  y: number;
+  pMouseX: number;
+  pMouseY: number;
+  life: number;
+}
+
 export default function useActionGame(props: ActionGameProps) {
-  const { listOrder, handleItemHit, createTrailingEffect, isSfxOn } = props;
+  const { listOrder, handleItemHit, isSfxOn } = props;
   const totalObjectTier = listOrder.reduce((total, order) => order.object_tier + total, 0);
-  const fruitListRef = useRef<any>();
-  const intervalRef = useRef<number | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const linesArrayRef = useRef<IPosition[]>([]);
+  const listItemRef = useRef<Fruit[]>([]);
 
   useEffect(() => {
-    if (fruitListRef.current) {
-      const myInterval = setInterval(startFalling, 10);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const context = canvasRef.current?.getContext('2d');
+    if (!context) return;
 
-      return () => {
-        stopFalling();
-        clearInterval(myInterval);
-      };
-    }
-  }, [fruitListRef.current, totalObjectTier]);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - 87 - 96;
 
-  const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
-    const x =
-      e.type === 'touchmove'
-        ? (e as React.TouchEvent).touches[0].clientX
-        : (e as React.MouseEvent).clientX;
-    const y =
-      e.type === 'touchmove'
-        ? (e as React.TouchEvent).touches[0].clientY
-        : (e as React.MouseEvent).clientY;
+    let animationFrameId: number;
 
-    createTrailingEffect(x, y);
-    combineItemsFromOrders.forEach((el, index) => {
-      const fruitElement = document.getElementById(`fruit-${index}`);
-      if (!fruitElement) return;
-      const top = Number(fruitElement?.style.top.replace('px', ''));
-      const left = Number(fruitElement?.style.left.replace('px', ''));
-      const height = fruitElement.clientHeight;
-      const width = fruitElement.clientWidth;
+    const startFalling = () => {
+      combineItemsFromOrders.forEach((item) => {
+        let object = {
+          object_id: item.object_id,
+          x: getXOfItem(),
+          y: -(Math.random() * canvas.height),
+          speed: Math.random() * 1 + 1,
+        };
 
-      if (x >= left && x <= left + width && y - 87 >= top && y - 87 <= top + height) {
-        const randomWidth = Math.random() * window.innerWidth;
+        listItemRef.current.push(object);
+      });
+    };
 
-        fruitElement.style.top = `${-(Math.random() * 87)}px`;
-        if (randomWidth === 0) {
-          fruitElement.style.left = `20px`;
-        } else if (randomWidth + fruitElement.clientWidth > window.innerWidth) {
-          fruitElement.style.left = `${window.innerWidth - fruitElement.clientWidth - 20}px`;
-        } else {
-          fruitElement.style.left = `${randomWidth}px`;
+    const animate = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      listItemRef.current.forEach((item) => {
+        item.y += item.speed;
+        if (item.y > canvas.height) {
+          item.y = -(Math.random() * canvas.height) - 87;
         }
-        handleItemHit(el.object_id, x, y);
-        playAudio();
-      }
-    });
-  };
+        const image = new Image();
+        image.src = combineItemsFromOrders.filter(
+          (el) => el.object_id === item.object_id,
+        )[0].img_url;
+        // Draw the fruit
+        context.save();
+        context.drawImage(image, item.x, item.y, IMAGE_SIZE.WIDTH, IMAGE_SIZE.HEIGHT);
+        context.restore();
+      });
+
+      renderMouseLines(context);
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+    startFalling();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [totalObjectTier, canvasRef]);
 
   const getItemsByTier = (tier: number) => {
     switch (tier) {
@@ -80,66 +102,123 @@ export default function useActionGame(props: ActionGameProps) {
     }
   };
 
-  const playAudio = () => {
-    if (isSfxOn) {
-      const randomNumber = Math.floor(Math.random() * 3) + 1;
-      const audio = document.getElementById(`audioSound-${randomNumber}`);
-
-      if ((audio as HTMLAudioElement).paused) {
-        (audio as HTMLAudioElement).currentTime = 0;
-        (audio as HTMLAudioElement).volume = 1;
-        (audio as HTMLAudioElement).play();
-      }
-    }
-  };
-
   const combineItemsFromOrders = useMemo(() => {
-    // random index combinedItems 0 or 1
-    // const randomIndexTier = Math.floor(Math.random() * 2);
-
-    const tiers = listOrder.map((order) => order.object_tier);
+    const tiers = new Set(listOrder.map((order) => order.object_tier));
     let combinedItems: { object_id: number; img_url: string; speed: number }[] = [];
-    console.log('tiers', tiers);
     tiers.forEach((tier) => {
       combinedItems = [...combinedItems, ...getItemsByTier(tier)];
     });
-
-    // amount object tier 18
-    // combinedItems = [...combinedItems, ...getItemsByTier(tiers[randomIndexTier])];
     return shuffleArray(combinedItems);
   }, [totalObjectTier]);
 
-  const startFalling = () => {
-    combineItemsFromOrders.forEach((item, index) => {
-      const fruitElement = document.getElementById(`fruit-${index}`);
+  const renderMouseLines = (context: CanvasRenderingContext2D) => {
+    if (linesArrayRef.current.length === 0) return;
 
-      if (!fruitElement) return;
-      const top = Number(fruitElement?.style.top.replace('px', ''));
+    for (let i = 0; i < linesArrayRef.current.length; i++) {
+      const line = linesArrayRef.current[i];
 
-      fruitElement.style.top = `${top + item.speed}px`;
+      const lineWidth = Math.max(1, line.life * 6);
 
-      if (top > fruitListRef.current.clientHeight) {
-        let randomWidth = Math.random() * window.innerWidth;
+      context.strokeStyle = 'white';
+      context.lineWidth = lineWidth;
+      context.beginPath();
+      context.moveTo(line.pMouseX, line.pMouseY);
+      context.lineTo(line.x, line.y);
+      context.stroke();
+      context.closePath();
 
-        fruitElement.style.top = `${-(Math.random() * 87)}px`;
+      line.life -= 0.05;
 
-        if (randomWidth === 0) {
-          fruitElement.style.left = `20px`;
-        } else if (randomWidth + fruitElement.clientWidth > window.innerWidth) {
-          fruitElement.style.left = `${window.innerWidth - fruitElement.clientWidth - 20}px`;
-        } else {
-          fruitElement.style.left = `${randomWidth}px`;
-        }
+      if (line.life <= 0) {
+        linesArrayRef.current.splice(i, 1);
+        i--;
       }
-    });
-  };
-
-  const stopFalling = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current); // Clear interval
-      intervalRef.current = null;
     }
   };
 
-  return { combineItemsFromOrders, handleTouchMove, fruitListRef };
+  const handleMousemove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    slicingItem(mouseX, mouseY);
+    effectLine(mouseX, mouseY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.touches[0].clientX - rect.left;
+    const mouseY = e.touches[0].clientY - rect.top;
+    slicingItem(mouseX, mouseY);
+    effectLine(mouseX, mouseY);
+  };
+
+  const getXOfItem = () => {
+    const randomWidth = Math.random() * window.innerWidth;
+    if (randomWidth === 0) {
+      return 20;
+    } else if (randomWidth + IMAGE_SIZE.WIDTH > window.innerWidth) {
+      return window.innerWidth - IMAGE_SIZE.WIDTH - 20;
+    } else {
+      return randomWidth;
+    }
+  };
+
+  const slicingItem = (mouseX: number, mouseY: number) => {
+    listItemRef.current = listItemRef.current.map((item) => {
+      const isColliding =
+        mouseX >= item.x &&
+        mouseX <= item.x + IMAGE_SIZE.WIDTH &&
+        mouseY >= item.y &&
+        mouseY <= item.y + IMAGE_SIZE.WIDTH;
+      if (isColliding) {
+        if (isSfxOn) {
+          playAudio();
+        }
+        handleItemHit(item.object_id, mouseX, mouseY);
+        return {
+          ...item,
+          y: -Math.random() * 300 + 87,
+          x: getXOfItem(),
+        };
+      }
+      return item;
+    });
+  };
+
+  const effectLine = (mouseX: number, mouseY: number) => {
+    const prevMouseX = linesArrayRef.current.length
+      ? linesArrayRef.current[linesArrayRef.current.length - 1].x
+      : mouseX;
+    const prevMouseY = linesArrayRef.current.length
+      ? linesArrayRef.current[linesArrayRef.current.length - 1].y
+      : mouseY;
+
+    linesArrayRef.current.push({
+      x: mouseX,
+      y: mouseY,
+      pMouseX: prevMouseX,
+      pMouseY: prevMouseY,
+      life: 1,
+    });
+    if (linesArrayRef.current.length > 4) {
+      linesArrayRef.current.shift();
+    }
+  };
+
+  const playAudio = () => {
+    const randomNumber = Math.floor(Math.random() * 3) + 1;
+    const audio = document.getElementById(`audioSound-${randomNumber}`);
+    if (audio && (audio as HTMLAudioElement).paused) {
+      (audio as HTMLAudioElement).currentTime = 0;
+      (audio as HTMLAudioElement).volume = 1;
+      (audio as HTMLAudioElement).play();
+    }
+  };
+
+  return { handleTouchMove, canvasRef, handleMousemove };
 }

@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import SectionScreen from './SectionScreen';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { SFX_KEYS } from '@/constants';
 const SplashScreen = ({ minDisplayTime }: { minDisplayTime: number }) => {
   const [progress, setProgress] = useState(0);
-  const { playSfx } = useSoundEffect();
+  const { playOutro } = useSoundEffect();
   useEffect(() => {
-    playSfx(SFX_KEYS.SPARKS_OUTRO);
+    playOutro();
     const MAX_PROGRESS = 99;
     const INCREASE_PER_STEP = 0.5;
     const timePerStep = minDisplayTime / (MAX_PROGRESS / INCREASE_PER_STEP);

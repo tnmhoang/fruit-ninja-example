@@ -8,11 +8,10 @@ import OrderGame from './components/OrderGame';
 import OrderToast from './components/OrderToast';
 import useEffectGame from './hooks/useEffectGame';
 import usePlayGame from './hooks/usePlayGame';
-import GameCanvas from './components/GameCanvas';
 
 const PlayGame = () => {
   const { profile } = useProfileStore();
-  const { createCompletedEffect, createTrailingEffect } = useEffectGame();
+  const { createCompletedEffect } = useEffectGame();
   const { isSfxOn } = useSoundEffectStore();
   const { listOrder, handleItemHit, openOrderCompleted, rewards, keepPlaying, orderCompleted } =
     usePlayGame({
@@ -20,19 +19,7 @@ const PlayGame = () => {
     });
 
   const game = useMemo(
-    () => (
-      <Game
-        listOrder={listOrder}
-        handleItemHit={handleItemHit}
-        createTrailingEffect={createTrailingEffect}
-        isSfxOn={isSfxOn}
-      />
-    ),
-    [listOrder.reduce((total, order) => order.object_tier + total, 0), isSfxOn],
-  );
-
-  const gameCanvas = useMemo(
-    () => <GameCanvas listOrder={listOrder} />,
+    () => <Game listOrder={listOrder} handleItemHit={handleItemHit} isSfxOn={isSfxOn} />,
     [listOrder.reduce((total, order) => order.object_tier + total, 0)],
   );
   return (
@@ -56,7 +43,7 @@ const PlayGame = () => {
           orderCompleted={orderCompleted}
         />
 
-        <div className="h-full w-full">{gameCanvas}</div>
+        <div className="h-full w-full">{game}</div>
         <NavMenu />
       </div>
     </>

@@ -58,7 +58,7 @@ export default function LevelUpDialog({
                 <DogCoinIcon className="w-10" />
               </div>
               <div className="max-w-80 pt-2 text-sm font-medium capitalize">
-                {`Woof woof! You've just advanced to ${leagueRewards?.title}! Enjoy your [${leagueRewards?.reward}] bark bucks and
+                {`Woof woof! You've just advanced to ${leagueRewards?.title}! Enjoy your [${formatCurrency(leagueRewards?.reward, 2)}] bark bucks and
                 keep climbing the leaderboard!`}
               </div>
               <Button3D

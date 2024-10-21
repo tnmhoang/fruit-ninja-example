@@ -104,8 +104,26 @@ export const toTitleCase = (str: string): string => {
   return arrayTitles.join(' ');
 };
 
-export function getArraysRandomObjectId(min: number, max: number, total: number) {
-  const numbers = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+export function getArraysRandomObjectId({
+  min,
+  max,
+  total,
+  prevObjectId,
+  objectIdsExits,
+}: {
+  min: number;
+  max: number;
+  total: number;
+  prevObjectId?: number;
+  objectIdsExits?: number[];
+}) {
+  let numbers = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+  if (prevObjectId) {
+    numbers = numbers.filter((el) => el !== prevObjectId);
+  }
+  if (objectIdsExits && objectIdsExits?.length > 0) {
+    numbers = numbers.filter((el) => !objectIdsExits.includes(el));
+  }
   // Shuffle the array
   for (let i = numbers.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -118,11 +136,20 @@ export function getArraysRandomObjectId(min: number, max: number, total: number)
 
 export function shuffleArray(array: { object_id: number; img_url: string; speed: number }[]) {
   for (let i = array.length - 1; i > 0; i--) {
-    // Chọn một chỉ số ngẫu nhiên từ 0 đến i
     const j = Math.floor(Math.random() * (i + 1));
 
-    // Hoán đổi phần tử array[i] và array[j]
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+}
+
+export function getRandomOrderDog(prevOrderDog?: number) {
+  let numbers = Array.from({ length: 12 }).map((_, index) => index + 1);
+  if (prevOrderDog) {
+    numbers = numbers.filter((el) => el !== prevOrderDog);
+  }
+  const randomIndex = Math.floor(Math.random() * numbers.length);
+
+  // Return the first 'count' numbers from the shuffled array
+  return numbers[randomIndex];
 }

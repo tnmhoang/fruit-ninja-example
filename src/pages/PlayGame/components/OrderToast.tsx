@@ -56,7 +56,13 @@ const OrderToast = ({
     <div className="toast-custom hidden w-full" id="toast-custom">
       <div className="flex w-full rounded-2xl border-[2px] border-solid border-[#A9B957] bg-[#DDE3BC] p-3">
         <div className="h-[56px] w-[56px] overflow-hidden rounded-full bg-[#352E23]">
-          <img src={orderCompleted?.image_url ?? './imgs/orders/dogs/dog1.png'} />
+          <img
+            src={
+              orderCompleted?.order_dog
+                ? `./imgs/orders/dogs/dog${orderCompleted.order_dog}.png`
+                : './imgs/orders/dogs/dog1.png'
+            }
+          />
         </div>
         <div className="flex h-full flex-col justify-between pl-2">
           <div className="text-sm font-semibold text-[#473D2E]">Completed order! You get:</div>

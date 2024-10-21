@@ -130,6 +130,9 @@ export enum CONFIG_LINK_SOCIAL {
   REDDIT = 'https://www.reddit.com/r/DogLibre/',
   LINKEDIN = 'https://www.linkedin.com/company/doglibre',
   TIKTOK = 'https://www.tiktok.com/@doglibre',
+  FACEBOOK = 'https://www.facebook.com/DogLibre/',
+  READ_WHITEPAPER = 'https://doglibre.gitbook.io/doglibre',
+  JOIN_PRESALE = 'https://www.doglibre.com/',
 }
 
 export enum CONFIG_TYPE {

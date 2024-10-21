@@ -130,10 +130,7 @@ export const tier4Items = [
   },
 ];
 
-export function generateRandomNumber(id: number) {
-  const now = new Date();
-  const timestamp = now.getTime(); // Get current time in milliseconds
-  const randomPart = Math.random(); // Generate a random number between 0 and 1
-
-  return timestamp * randomPart + id;
-}
+export const IMAGE_SIZE = {
+  WIDTH: 64,
+  HEIGHT: 64,
+};

@@ -2,13 +2,15 @@ import Button3D from '@/components/common/Button3D';
 import { LegIcon } from '@/components/icons';
 import SectionScreen from '@/components/SectionScreen';
 import { APP_URLS } from '@/constants';
-import { useBackButton } from '@telegram-apps/sdk-react';
+import { CONFIG_LINK_SOCIAL } from '@/types';
+import { initUtils, useBackButton } from '@telegram-apps/sdk-react';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const AboutPage = () => {
   const bb = useBackButton();
   const navigate = useNavigate();
+  const utils = initUtils();
 
   useEffect(() => {
     bb.show();
@@ -114,30 +116,33 @@ const AboutPage = () => {
       </div>
       <nav className="fixed bottom-0 left-0 right-0 z-50 text-white">
         <div className="relative flex h-[96px] w-full gap-2 bg-gradient-to-t from-[#E0D6C7] to-[rgba(224,214,199,0)] p-4">
-          <Link to={'https://doglibre.gitbook.io/doglibre'} target="_blank" className="flex-1">
-            <Button3D
-              className="h-[56px]"
-              classBtn={
-                'flex flex-col justify-center items-center border-b border-white !rounded-[20px] !z-10 !bg-[#2F90DB]'
-              }
-              classBtnBottom={'!rounded-[20px] !bg-[#2673AF] !z-0'}
-            >
-              <div className="text-border-blue flex items-center gap-2 font-backToSchool">
-                <div>Read Whitepaper</div>
-              </div>
-            </Button3D>
-          </Link>
+          <Button3D
+            className="h-[56px] w-full"
+            classBtn={
+              'flex flex-col justify-center items-center border-b border-white !rounded-[20px] !z-10 !bg-[#2F90DB]'
+            }
+            classBtnBottom={'!rounded-[20px] !bg-[#2673AF] !z-0'}
+            onClick={() => {
+              utils.openLink(CONFIG_LINK_SOCIAL.READ_WHITEPAPER);
+            }}
+          >
+            <div className="text-border-blue flex items-center gap-2 font-backToSchool tracking-wider">
+              <div>Read Whitepaper</div>
+            </div>
+          </Button3D>
 
           <Button3D
-            className="h-[56px] flex-1"
+            className="h-[56px] w-full"
             classBtn={
               'flex flex-col justify-center items-center border-b border-white !rounded-[20px] !z-10 !bg-[#A9B957]'
             }
             classBtnBottom={'!rounded-[20px] !bg-[#656F34] !z-0'}
-            onClick={() => navigate(APP_URLS.UPGRADE)}
+            onClick={() => {
+              utils.openLink(CONFIG_LINK_SOCIAL.JOIN_PRESALE);
+            }}
           >
-            <div className="text-border-green flex items-center gap-2 font-backToSchool">
-              <div>Save a Dog</div>
+            <div className="text-border-green flex items-center gap-2 font-backToSchool tracking-wider">
+              <div>Join Presale</div>
             </div>
           </Button3D>
         </div>

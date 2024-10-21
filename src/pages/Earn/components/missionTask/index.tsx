@@ -80,7 +80,7 @@ const MissionTask = () => {
           >
             <div className="flex gap-3">
               <div className="flex max-h-11 min-h-11 min-w-11 max-w-11 items-center justify-center overflow-hidden rounded-full">
-                <img src={'./imgs/icons/invite-friends.png'} className="h-full w-full" />
+                <img src={'./imgs/website.png'} className="h-full w-full" />
               </div>
               <div className="flex flex-col gap-[3px]">
                 <div className="text-sm font-semibold text-[#352E23]">{dailyMissionTask.title}</div>

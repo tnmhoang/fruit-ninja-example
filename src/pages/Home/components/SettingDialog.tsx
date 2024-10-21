@@ -59,7 +59,7 @@ const SettingDialog = ({ open, setOpen }: { open: boolean; setOpen: (value: bool
                   alt=""
                   className="absolute left-0 top-0 h-full w-full"
                 />
-                <div className="relative flex w-full items-center gap-2">
+                <div className="relative flex w-full cursor-pointer items-center gap-2">
                   <AboutIcon className="w-9" />
                   <div className="flex-1 font-semibold">About the project</div>
                   <ArrowRightIcon className="w-5" />
@@ -151,12 +151,12 @@ const SettingDialog = ({ open, setOpen }: { open: boolean; setOpen: (value: bool
 
             <div className="relative flex flex-col items-center justify-center gap-2">
               <div className="font-semibold">Stay in touch!</div>
-              <div className="flex max-w-56 flex-wrap justify-center gap-2">
+              <div className="flex max-w-44 flex-wrap justify-center gap-2">
                 <LinkExternal
                   children={<InstagrammSettingIcon className="w-8" />}
                   href={CONFIG_LINK_SOCIAL.INSTAGRAM}
                 />
-                <LinkExternal children={<GithubSettingIcon className="w-8" />} />
+                {/* <LinkExternal children={<GithubSettingIcon className="w-8" />} /> */}
                 <LinkExternal
                   children={<TiktokSettingIcon className="w-8" />}
                   href={CONFIG_LINK_SOCIAL.TIKTOK}
@@ -165,7 +165,10 @@ const SettingDialog = ({ open, setOpen }: { open: boolean; setOpen: (value: bool
                   children={<LinkedinSettingIcon className="w-8" />}
                   href={CONFIG_LINK_SOCIAL.LINKEDIN}
                 />
-                <LinkExternal children={<FacebookSettingIcon className="w-8" />} />
+                <LinkExternal
+                  children={<FacebookSettingIcon className="w-8" />}
+                  href={CONFIG_LINK_SOCIAL.FACEBOOK}
+                />
                 <LinkExternal
                   children={<DiscordSettingIcon className="w-8" />}
                   href={CONFIG_LINK_SOCIAL.DISCORD}

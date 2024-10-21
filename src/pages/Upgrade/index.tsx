@@ -81,98 +81,86 @@ const UpgradePage = () => {
             {data &&
               profile &&
               Object.keys(data).map((item) => (
-                <Button3D
+                <div
                   key={item}
-                  className={cn('no-active h-[80px] w-full')}
-                  classBtn={cn(
-                    'flex flex-col justify-center items-center border-b border-white !rounded-2xl !z-10 !bg-[#E8E0D5] !translate-y-0',
-                  )}
-                  classBtnBottom={cn('!rounded-2xl !bg-[#6A5B46] !z-0')}
+                  className="rounded-[20px] border border-b-4 border-[#473D2E] bg-[#E8E0D5] p-3"
                 >
-                  <div className="absolute z-50 flex w-full items-center gap-3 p-3">
-                    <div className="flex flex-1 items-center gap-3 overflow-hidden">
+                  <div className="flex flex-1 flex-col gap-3 text-sm font-semibold text-[#352E23]">
+                    <div className="flex items-center gap-2">
                       {item === ('item_per_object' as keyof IUpgrade) ? (
-                        <div className="w-11 min-w-11">
+                        <div className="w-10 min-w-10">
                           <ItemUpgradeIcon />
                         </div>
                       ) : (
-                        <div className="w-11 min-w-11">
+                        <div className="w-10 min-w-10">
                           <DogCoinIcon />
                         </div>
                       )}
+                      <div className="line-clamp-3 flex-1 text-start">
+                        {(item as KeyUpgradeDTO) === 'item_per_object' && 'Item Booster Per Object'}
+                        {(item as KeyUpgradeDTO) === 'coin_per_object' &&
+                          'Bucks Multiplier Per Object'}
+                        {(item as KeyUpgradeDTO) === 'passive_coin_per_min' &&
+                          'Passive Bucks Generator'}
+                      </div>
 
-                      <div className="flex flex-1 flex-col gap-1 text-sm font-semibold text-[#352E23]">
-                        <div className="line-clamp-1 text-start">
-                          {(item as KeyUpgradeDTO) === 'item_per_object' &&
-                            'Item Booster Per Object'}
-                          {(item as KeyUpgradeDTO) === 'coin_per_object' &&
-                            'Bucks Multiplier Per Object'}
-                          {(item as KeyUpgradeDTO) === 'passive_coin_per_min' &&
-                            'Passive Bucks Generator'}
+                      <div
+                        className={cn(
+                          'flex h-fit cursor-pointer gap-1 rounded-xl border border-[#656F34] bg-[#A9B957] px-3 py-2 text-white hover:bg-[#b4c55d]',
+                          data[item as keyof IUpgrade].price > profile.current_coin &&
+                            'pointer-events-none opacity-50',
+                        )}
+                        onClick={() => handleUpgrade(item as keyof IUpgrade)}
+                      >
+                        <div className="text-border-green">
+                          {data && formatCurrency(data[item as keyof IUpgrade].price, 2)}
                         </div>
-                        <div className="flex w-full justify-between gap-3">
-                          <div className="flex items-center gap-[6px]">
-                            <div className="flex items-center gap-3 text-xs">
-                              <div className="relative flex items-center pl-1">
-                                <span className="absolute -left-1 z-30 max-h-6 max-w-6">
-                                  {item === ('item_per_object' as keyof IUpgrade) ? (
-                                    <ItemUpgradeIcon className="w-6" />
-                                  ) : (
-                                    <DogCoinIcon className="w-6" />
-                                  )}
-                                </span>
-                                <div
-                                  style={{ boxShadow: '0px 1px 1px 0px #D0C1AC inset' }}
-                                  className="flex h-6 w-fit items-center justify-end gap-1 rounded-full bg-[#FFFFFF] pl-5 pr-2 text-right font-backToSchool text-xs font-medium text-[#352E23]"
-                                >
-                                  {formatCurrency(data[item as keyof IUpgrade].current_level, 2)}
-                                  {(item as KeyUpgradeDTO) === 'passive_coin_per_min' && (
-                                    <span className="normal-case text-[#A9A29D]">/min</span>
-                                  )}
-                                </div>
-                              </div>
+
+                        <DogCoinIcon className="w-5" />
+                      </div>
+                    </div>
+                    <div className="flex w-full justify-center rounded-xl border border-[#352E2326] bg-[#E0D6C7] p-2">
+                      <div className="flex items-center gap-[6px]">
+                        <div className="flex items-center gap-3">
+                          <div className="relative flex items-center gap-1">
+                            <div className="max-h-6 max-w-6">
+                              {item === ('item_per_object' as keyof IUpgrade) ? (
+                                <ItemUpgradeIcon className="w-6" />
+                              ) : (
+                                <DogCoinIcon className="w-6" />
+                              )}
                             </div>
-                            <UpLevelIcon />
-                            <div className="flex items-center gap-3 pl-1 text-xs">
-                              <div className="relative flex items-center pl-1">
-                                <span className="absolute -left-1 z-30 max-h-6 max-w-6">
-                                  {item === ('item_per_object' as keyof IUpgrade) ? (
-                                    <ItemUpgradeIcon className="w-6" />
-                                  ) : (
-                                    <DogCoinIcon className="w-6" />
-                                  )}
-                                </span>
-                                <div
-                                  style={{ boxShadow: '0px 1px 1px 0px #D0C1AC inset' }}
-                                  className="flex h-6 w-fit items-center justify-end gap-1 rounded-full bg-[#FFFFFF] pl-5 pr-2 text-right font-backToSchool text-xs font-medium text-[#352E23]"
-                                >
-                                  {formatCurrency(data[item as keyof IUpgrade].next_level, 2)}
-                                  {(item as KeyUpgradeDTO) === 'passive_coin_per_min' && (
-                                    <span className="normal-case text-[#A9A29D]">/min</span>
-                                  )}
-                                </div>
-                              </div>
+
+                            <div className="flex h-6 items-center justify-end gap-[2px] rounded-full pt-[5px] text-right font-backToSchool text-sm font-medium text-[#352E23]">
+                              {formatCurrency(data[item as keyof IUpgrade].current_level, 2)}
+                              {(item as KeyUpgradeDTO) === 'passive_coin_per_min' && (
+                                <span className="normal-case text-[#A9A29D]">/min</span>
+                              )}
                             </div>
                           </div>
-                          <div
-                            className={cn(
-                              'flex gap-1 rounded-xl border border-[#656F34] bg-[#A9B957] px-3 py-2 text-white hover:bg-[#b4c55d]',
-                              data[item as keyof IUpgrade].price > profile.current_coin &&
-                                'pointer-events-none opacity-50',
-                            )}
-                            onClick={() => handleUpgrade(item as keyof IUpgrade)}
-                          >
-                            <div className="text-border-green">
-                              {data && formatCurrency(data[item as keyof IUpgrade].price, 2)}
+                        </div>
+                        <UpLevelIcon />
+                        <div className="flex items-center gap-3">
+                          <div className="relative flex items-center gap-1">
+                            <div className="max-h-6 max-w-6">
+                              {item === ('item_per_object' as keyof IUpgrade) ? (
+                                <ItemUpgradeIcon className="w-6" />
+                              ) : (
+                                <DogCoinIcon className="w-6" />
+                              )}
                             </div>
-
-                            <DogCoinIcon className="w-5" />
+                            <div className="flex h-fit items-center justify-end gap-[2px] rounded-full pt-[5px] text-right font-backToSchool text-sm font-medium text-[#352E23]">
+                              {formatCurrency(data[item as keyof IUpgrade].next_level, 2)}
+                              {(item as KeyUpgradeDTO) === 'passive_coin_per_min' && (
+                                <span className="normal-case text-[#A9A29D]">/min</span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </Button3D>
+                </div>
               ))}
           </div>
         </div>

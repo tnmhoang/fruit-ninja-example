@@ -21,11 +21,20 @@ export default function usePlayGame({
   const { profile } = useProfileStore();
   const { refetch } = useProfile();
 
-  const getNewOrder = () => {
+  const getNewOrder = ({
+    objectIdsExits,
+    prevOrderDog,
+  }: {
+    objectIdsExits?: number[];
+    prevOrderDog?: number;
+  }) => {
     try {
-      const response = fetchNewOrderHelper(Number(profile?.volunteer_rank));
+      const response = fetchNewOrderHelper({
+        userVolunteerRank: Number(profile?.volunteer_rank),
+        objectIdsExits,
+        prevOrderDog,
+      });
       if (!response) return;
-      response.image_url = `./imgs/orders/dogs/dog${Math.floor(Math.random() * 12 + 1)}.png`;
       response.items = response.items.map((item) => ({ ...item, completed: 0 }));
       return response;
     } catch (error) {
@@ -39,9 +48,14 @@ export default function usePlayGame({
 
   const getFirstListOrder = async () => {
     try {
-      const newFirstOrder = getNewOrder();
+      const newFirstOrder = getNewOrder({});
       if (!newFirstOrder) return;
-      const newSecondOrder = getNewOrder();
+      const itemIds = newFirstOrder.items.map((el) => el.object_id);
+
+      const newSecondOrder = getNewOrder({
+        objectIdsExits: itemIds,
+        prevOrderDog: newFirstOrder.order_dog,
+      });
       if (!newSecondOrder) return;
       setListOrder([newFirstOrder, newSecondOrder]);
     } catch (error) {
@@ -120,15 +134,21 @@ export default function usePlayGame({
   };
 
   const keepPlaying = async () => {
-    const newOrder = getNewOrder();
-
+    // const newOrder = getNewOrder();
+    const orderNotCompleteIndex = orderCompleteIndex === 0 ? 1 : 0;
+    const newOrder = getNewOrder({
+      objectIdsExits: listOrder[orderNotCompleteIndex].items.map((el) => el.object_id),
+      prevOrderDog: listOrder[orderNotCompleteIndex].order_dog,
+    });
     if (!newOrder) return;
 
     setListOrder((prevListOrder) => {
       setOpenOrderCompleted(false);
+
       if (orderCompleteIndex === 0) {
         return [prevListOrder[1], newOrder];
       }
+
       return [prevListOrder[0], newOrder];
     });
   };
